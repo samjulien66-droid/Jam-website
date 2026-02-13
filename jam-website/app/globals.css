@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #ffffff;
+  --bg-secondary: #f5f9fc;
+  --accent: #5ba4c9;
+  --accent-hover: #4a93b8;
+  --warm: #1e3d4d;
+  --text: #334d5c;
+  --text-muted: #8ca3b0;
+  --border: #dde9f0;
+  --highlight: #fff5f3;
+  --coral: #e8846e;
+}
+
+body {
+  font-family: 'Crimson Pro', serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, transform, box-shadow;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+/* Focus styles for accessibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-8 py-4 bg-sky-accent text-white font-mono text-sm uppercase tracking-wider rounded cursor-pointer hover:bg-sky-accent-hover;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-4 bg-transparent border-2 border-sky-accent text-sky-accent font-mono text-sm uppercase tracking-wider rounded cursor-pointer hover:bg-sky-accent hover:text-white;
+  }
+
+  .section-label {
+    @apply font-mono text-xs tracking-[4px] text-sky-accent uppercase mb-6;
+  }
+
+  .page-title {
+    @apply font-display text-6xl md:text-7xl text-sky-warm tracking-[8px] mb-6;
+  }
+
+  .card {
+    @apply bg-sky-bg-secondary rounded-xl border border-sky-border shadow-sm hover:shadow-md;
+  }
+}
