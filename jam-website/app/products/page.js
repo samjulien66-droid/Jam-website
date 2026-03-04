@@ -1,22 +1,17 @@
-import Link from 'next/link'
+import { getProducts } from '@/sanity/lib/client'
 
-const categories = [
-  { name: 'Art & Prints', count: '12 items', icon: '🎨' },
-  { name: 'Stickers', count: '24 items', icon: '✨' },
-  { name: 'Home & Lifestyle', count: '8 items', icon: '🏠' },
-  { name: 'Accessories', count: '15 items', icon: '👜' },
-]
+const categoryLabels = {
+  'art-prints': 'Art & Prints',
+  'stickers': 'Stickers',
+  'home-lifestyle': 'Home & Lifestyle',
+  'accessories': 'Accessories',
+}
 
-const products = [
-  { name: 'Limited Edition Print', artist: 'Mira Byler', price: '$22.00' },
-  { name: 'Floral Sticker Pack', artist: 'Mira Byler', price: '$12.00' },
-  { name: 'Quilted Pencil Case', artist: 'Mira Byler', price: '$18.00' },
-  { name: 'Canvas Tote Bag', artist: 'Mira Byler', price: '$20.00' },
-  { name: 'Glitter Washi Tape', artist: 'Mira Byler', price: '$5.00' },
-  { name: 'Art Print Bundle', artist: 'Mira Byler', price: '$55.00' },
-]
+export const revalidate = 60
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const products = await getProducts()
+
   return (
     <div className="min-h-screen pt-32 pb-20 px-6 md:px-12">
       <div className="max-w-6xl mx-auto">
@@ -69,59 +64,49 @@ export default function ProductsPage() {
           </div>
         </section>
 
-        {/* Categories */}
-        <section className="mb-16">
-          <p className="section-label">Browse by Category</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {categories.map((cat, i) => (
-              <div
-                key={i}
-                className="card p-6 text-center cursor-pointer hover:-translate-y-1"
-              >
-                <div className="text-3xl mb-3">{cat.icon}</div>
-                <h3 className="font-display text-lg text-sky-warm tracking-wider mb-1">
-                  {cat.name}
-                </h3>
-                <p className="font-mono text-xs text-sky-text-muted">
-                  {cat.count}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* Product Grid */}
         <section>
           <p className="section-label">Recommended Products</p>
           <div className="grid md:grid-cols-3 gap-6">
-            {products.map((product, i) => (
-              <div
-                key={i}
-                className="card overflow-hidden cursor-pointer hover:-translate-y-1"
-              >
-                <div className="aspect-square bg-gradient-to-br from-sky-accent/10 to-sky-coral/15 flex items-center justify-center">
-                  <span className="font-mono text-xs text-sky-text-muted">
-                    [Product Image]
-                  </span>
-                </div>
-                <div className="p-5">
-                  <h3 className="font-serif text-lg text-sky-warm mb-1">
-                    {product.name}
-                  </h3>
-                  <p className="font-mono text-xs text-sky-text-muted mb-3">
-                    by {product.artist}
-                  </p>
-                  <div className="flex justify-between items-center">
-                    <span className="font-mono text-sm text-sky-accent font-bold">
-                      {product.price}
-                    </span>
-                    <span className="font-mono text-xs text-sky-accent">
-                      View →
+            {products && products.length > 0 ? (
+              products.map((product) => (
+                <a
+                  key={product._id}
+                  href={product.url || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="card overflow-hidden cursor-pointer hover:-translate-y-1 block"
+                >
+                  <div className="aspect-square bg-gradient-to-br from-sky-accent/10 to-sky-coral/15 flex items-center justify-center">
+                    <span className="font-mono text-xs text-sky-text-muted">
+                      {categoryLabels[product.category] || product.category}
                     </span>
                   </div>
-                </div>
+                  <div className="p-5">
+                    <h3 className="font-serif text-lg text-sky-warm mb-1">
+                      {product.name}
+                    </h3>
+                    <p className="font-mono text-xs text-sky-text-muted mb-3">
+                      by {product.artist}
+                    </p>
+                    <div className="flex justify-between items-center">
+                      <span className="font-mono text-sm text-sky-accent font-bold">
+                        {product.price}
+                      </span>
+                      <span className="font-mono text-xs text-sky-accent">
+                        View →
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              ))
+            ) : (
+              <div className="card p-12 text-center md:col-span-3">
+                <p className="font-mono text-sm text-sky-text-muted">
+                  Products coming soon...
+                </p>
               </div>
-            ))}
+            )}
           </div>
         </section>
       </div>
