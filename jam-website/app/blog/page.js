@@ -15,7 +15,7 @@ function formatDate(dateString) {
   return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }
 
-export const revalidate = 60 // Refresh content every 60 seconds
+export const revalidate = 60
 
 export default async function BlogPage() {
   const posts = await getBlogPosts()
@@ -34,33 +34,32 @@ export default async function BlogPage() {
         <div className="space-y-8">
           {posts && posts.length > 0 ? (
             posts.map((post) => (
-              <article
-                key={post._id}
-                className="card p-8 border-l-4 border-l-sky-accent cursor-pointer hover:-translate-y-1"
-              >
-                <div className="flex flex-wrap gap-4 mb-4">
-                  <span className="font-mono text-xs text-sky-accent uppercase tracking-wider bg-sky-accent/10 px-3 py-1 rounded">
-                    {categoryLabels[post.category] || post.category}
+              <Link key={post._id} href={`/blog/${post.slug}`}>
+                <article className="card p-8 border-l-4 border-l-sky-accent cursor-pointer hover:-translate-y-1 mb-8">
+                  <div className="flex flex-wrap gap-4 mb-4">
+                    <span className="font-mono text-xs text-sky-accent uppercase tracking-wider bg-sky-accent/10 px-3 py-1 rounded">
+                      {categoryLabels[post.category] || post.category}
+                    </span>
+                    <span className="font-mono text-xs text-sky-text-muted py-1">
+                      {formatDate(post.publishedAt)}
+                    </span>
+                  </div>
+
+                  <h2 className="font-serif text-2xl md:text-3xl text-sky-warm mb-3">
+                    {post.title}
+                  </h2>
+
+                  {post.excerpt && (
+                    <p className="font-serif text-sky-text-muted leading-relaxed mb-4">
+                      {post.excerpt}
+                    </p>
+                  )}
+
+                  <span className="font-mono text-sm text-sky-accent">
+                    Read More →
                   </span>
-                  <span className="font-mono text-xs text-sky-text-muted py-1">
-                    {formatDate(post.publishedAt)}
-                  </span>
-                </div>
-
-                <h2 className="font-serif text-2xl md:text-3xl text-sky-warm mb-3">
-                  {post.title}
-                </h2>
-
-                {post.excerpt && (
-                  <p className="font-serif text-sky-text-muted leading-relaxed mb-4">
-                    {post.excerpt}
-                  </p>
-                )}
-
-                <span className="font-mono text-sm text-sky-accent">
-                  Read More →
-                </span>
-              </article>
+                </article>
+              </Link>
             ))
           ) : (
             <div className="card p-12 text-center">
